@@ -1,0 +1,26 @@
+import mongoose from "mongoose";
+
+
+const CommentSchema = mongoose.Schema({
+    textcomment:{
+        type:String,
+    },
+    owner:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"UserMainModel"
+    },
+    undertweet:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"TweetModel"
+    },
+    rep:[{
+           type:mongoose.Schema.Types.ObjectId,
+           ref:"CommentModel"
+    }]
+
+})
+
+
+const CommentModel = mongoose.model('CommentModel',CommentSchema)
+
+export default CommentModel
