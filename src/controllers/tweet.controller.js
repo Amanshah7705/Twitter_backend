@@ -2,6 +2,7 @@ import TweetModel from "../models/tweet.models.js";
 import APIERROR from "../utils/apierror.js";
 import APIRESPONCE from "../utils/apiresponce.js";
 import HandleMiddleware from "../utils/handlemiddleware.js";
+import { TweetOrCommentLikesCount } from "./likes.controller.js";
 
 
 const AddTweet = HandleMiddleware(async(req,res,next)=>{
@@ -23,7 +24,7 @@ const DeleteTweet = HandleMiddleware(async(req,res,next)=>{
     try {
         const mydata = req.user
         const {id_for_delete} = req.body
-        const d1 = await TweetModel.findById({_id : id_for_delete})
+        const d1 = await TweetModel.find({_id : id_for_delete, owner:mydata._id})
         if(d1){
                   await TweetModel.deleteOne({_id : id_for_delete})
         }
@@ -58,7 +59,41 @@ const GetAllTweet = HandleMiddleware(async(req,res,next)=>{
     try {
         const mydata = req.user
         const d2 = await TweetModel.find({owner:mydata._id},{tweetabout:1})
-        res.status(200).json(new APIRESPONCE(200,"all tweet from user",d2))
+        const result = await TweetModel.aggregate([
+            {
+                $match:{
+                    owner:mydata._id
+                }
+            },
+            {
+              $lookup: {
+                from: "LikesModel", 
+                localField: "_id",
+                foreignField: "whichtweet",
+                as: "likes",
+              },
+            },
+            {
+                $addFields:{
+                    totalLikes: { $size: "$likes" },
+                    LikedByme :{
+                        $in:[mydata._id,"$likes.owner"]
+                    }
+                }
+            },
+            {
+              $project: {
+                _id: 1,
+                tweetabout:1,
+                owner: 1,
+                totalLikes:1,
+                LikedByme:1,
+                
+              },
+            },
+          ]);
+          console.log(result)
+        res.status(200).json(new APIRESPONCE(200,"all tweet from user",result))
     } catch (error) {
          throw new APIERROR(501,"error occur at geeting tweet from user",error.errors)
     }
@@ -87,4 +122,13 @@ const AllTweetOfThatUser = HandleMiddleware(async(req,res,next)=>{
          throw new APIERROR(501,"error occur at All tweet of user moment",)
     }
 })
-export {AddTweet,DeleteTweet,UpdateTweet,GetAllTweet,ExistTweet,AllTweetOfThatUser}
+
+
+const TweetFromId = HandleMiddleware(async(req,res,next)=>{
+    const {id} = req.body
+    const data = await TweetModel.findById(id)
+    res.status(200).json(new APIRESPONCE(200,"Tweet You serch for",data))
+})
+
+
+export {AddTweet,DeleteTweet,UpdateTweet,GetAllTweet,ExistTweet,AllTweetOfThatUser,TweetFromId}

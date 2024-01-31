@@ -101,26 +101,29 @@ const LoginUser = HandleMiddleware(async(req,res,next)=>{
         if(!change){
             throw new APIERROR(501,"Password not match",)
         }
-        if(newData.refresh_token !=  null){
-            let newData3={
-                username:newData.username,
-                email:newData.email
-            }
-            res.status(200).json(new APIRESPONCE(200,"Logged Success",newData3))
+        // if(newData.refresh_token !=  null){
+        //     let newData3={
+        //         username:newData.username,
+        //         email:newData.email
+        //     }
+        //     res.status(200).json(new APIRESPONCE(200,"Logged Success",newData3))
 
-        }
-        else{
+        // }
+        // else{
             const accessToken1 =  await GenerateAccessToken(username)
             const refreshToken1 = await  GenerateRefreshToken(username)
+
             newData.refresh_token = refreshToken1
             await newData.save()
             let newData3={
                 username:newData.username,
-                email:newData.email
+                email:newData.email,
+                accessToken:accessToken1,
+                refreshToken:refreshToken1
             }
-            res.status(200).cookie("accessToken",accessToken1,options).cookie("refreshToken",refreshToken1,options).json(new APIRESPONCE(200,"Logged Success",newData3))
+            res.status(200).json(new APIRESPONCE(200,"Logged Success",newData3))
 
-        }
+
     } catch (error) {
         throw new APIERROR(501,"error occur at login",error.errors)
     }
@@ -135,7 +138,7 @@ const ForgotPassword = HandleMiddleware(async (req, res, next) => {
   
       // Assuming mailOptions is defined here
       mailOptions.to = email;
-      mailOptions.text = `This is a new link for your password: ${process.env.PATH1}/users/new-password/${234}`;
+      mailOptions.text = `This is a new link for your password: ${process.env.PATH1}/NewPassword`;
   
       const data2 = await transporter.sendMail(mailOptions);
   
@@ -156,6 +159,7 @@ const NewPassword = HandleMiddleware(async(req,res,next)=>{
     }
     newData.password  = await MakePassword(password)
     await newData.save()
+    
     res.status(200).json(new APIRESPONCE(200,"Done",{username:newData.username,email:newData.email}))
 })
 const UpdateDetails = HandleMiddleware(async(req,res,next)=>{
@@ -339,6 +343,7 @@ const UnFollowList = HandleMiddleware(async(req,res,next)=>{
 
 })
 
+
 const UserDeatils = HandleMiddleware(async(req,res,next)=>{
   try {
     const {username} = req.body;
@@ -348,4 +353,7 @@ const UserDeatils = HandleMiddleware(async(req,res,next)=>{
      throw new APIERROR(501,"error occur at user details moment",)
   }
 })
-export {RegisterUser,LoginUser,GenerateAccessToken,GenerateRefreshToken,ForgotPassword,NewPassword,UpdateDetails,FollowList,UnFollowList,UserDeatils}
+const TimePass = HandleMiddleware(async(req,res,next)=>{
+  res.json({message:"1"})
+})
+export {RegisterUser,LoginUser,GenerateAccessToken,GenerateRefreshToken,ForgotPassword,NewPassword,UpdateDetails,FollowList,UnFollowList,UserDeatils,TimePass}

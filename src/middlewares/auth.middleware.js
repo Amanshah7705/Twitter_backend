@@ -3,25 +3,35 @@ import UserMainModel from '../models/users.models.js'
 import APIERROR from '../utils/apierror.js'
 import  HandleMiddleware from '../utils/handlemiddleware.js'
 import jwt from 'jsonwebtoken'
-const AuthMiddleWare = HandleMiddleware(async(req,res,next)=>{
-     try {
-        const token = req.cookies?.accessToken
-        if(!token){
-            throw new APIERROR(501,"Token not exist",)
-        }
-        const match = jwt.verify(token,process.env.ACCESS_TOKEN_SECRET)
-        if(!match){
-           throw new APIERROR(501,"Unauthorized",)
-        }
-        const checker = await UserMainModel.findOne({email:match.email},{password:0})
-        if(!checker){
-           throw new APIERROR(501,"User does not exist",)
-        }
-        req.user = checker
-        next()
-     } catch (error) {
-         throw new APIERROR(501,"error occur at middleware part",error.errors)
+const AuthMiddleWare = HandleMiddleware(async (req, res, next) => {
+   try {
+     let accessToken = req.headers.authorization
+     const d2=accessToken.split(" ")
+      accessToken=d2[1];
+     if (!accessToken) {
+       throw new APIERROR(401, "Unauthorized: Access token not provided");
      }
-})
+ 
+     const decodedToken = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+ 
+     if (!decodedToken) {
+       throw new APIERROR(401, "Unauthorized: Invalid access token");
+     }
+ 
+     // Optionally, you can check if the user exists or perform other validations here
+     const user = await UserMainModel.findOne({ email: decodedToken.email }, { password: 0 });
+ 
+     if (!user) {
+       throw new APIERROR(401, "Unauthorized: User not found");
+     }
+ 
+     req.user = user;
+     next()
+   } catch (error) {
+     throw new APIERROR(401, "Unauthorized", error.errors);
+     
+   }
+ });
+ 
 
 export default AuthMiddleWare

@@ -11,7 +11,7 @@ UserRouter.route("/login").post(LoginUser)
 
 UserRouter.route("/forgot-password").post(ForgotPassword)
 
-UserRouter.route("/new-password/234").post(NewPassword)
+UserRouter.route("/new-password").post(NewPassword)
 
 UserRouter.route("/update-profile").post(AuthMiddleWare,upload.fields([{name:"profile_picture",maxcount:1}]),UpdateDetails)
 UserRouter.route("/FollowTo").post(AuthMiddleWare,FollowList)
