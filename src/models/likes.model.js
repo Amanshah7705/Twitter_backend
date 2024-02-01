@@ -6,7 +6,7 @@ const LikesSchema = mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:"TweetModel"
     },
-    c:{
+    whichcomment:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"CommentModel"
     },

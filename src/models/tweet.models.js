@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import LikesModel from "./likes.model.js";
 
 const TweetSchema = mongoose.Schema({
       tweetabout:{
@@ -10,6 +11,15 @@ const TweetSchema = mongoose.Schema({
         ref:"UserMainModel"
       }
 })
+TweetSchema.pre('deleteOne', async function (next) {
+  try {
+    
+    const data =  await LikesModel.deleteMany({ whichtweet: this.getQuery()._id });
+      next();
+  } catch (error) {
+      next(error);
+  }
+});
 
 
 const TweetModel = mongoose.model('TweetModel',TweetSchema);

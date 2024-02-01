@@ -11,7 +11,6 @@ const AddLikes = HandleMiddleware(async(req,res,next)=>{
         if(whichcomment || whichtweet){
                 if(whichtweet){
                         const p1= await LikesModel.findOne({owner:mydata._id,whichtweet:whichtweet});
-                        console.log(p1)
                         if(p1 != null && p1?.whichtweet != null){
                             throw new APIERROR(501,"Allready liked",)
                         }

@@ -3,7 +3,7 @@ import APIERROR from "../utils/apierror.js";
 import APIRESPONCE from "../utils/apiresponce.js";
 import HandleMiddleware from "../utils/handlemiddleware.js";
 import { TweetOrCommentLikesCount } from "./likes.controller.js";
-
+import LikesModel from "../models/likes.model.js";
 
 const AddTweet = HandleMiddleware(async(req,res,next)=>{
       try {
@@ -61,38 +61,28 @@ const GetAllTweet = HandleMiddleware(async(req,res,next)=>{
         const d2 = await TweetModel.find({owner:mydata._id},{tweetabout:1})
         const result = await TweetModel.aggregate([
             {
-                $match:{
-                    owner:mydata._id
+                $lookup: {
+                  from: "likesmodels",
+                  localField: "_id",
+                  foreignField: "whichtweet",
+                  as: "likestweet"
                 }
-            },
-            {
-              $lookup: {
-                from: "LikesModel", 
-                localField: "_id",
-                foreignField: "whichtweet",
-                as: "likes",
               },
-            },
-            {
+              {
+                $match:{
+                     owner:mydata._id
+                }
+              },{
                 $addFields:{
-                    totalLikes: { $size: "$likes" },
-                    LikedByme :{
-                        $in:[mydata._id,"$likes.owner"]
+                    totallikes:{
+                        $size:"$likestweet"
+                    },
+                    LikedByme:{
+                        $in:[mydata._id,"$likestweet.owner"]
                     }
                 }
-            },
-            {
-              $project: {
-                _id: 1,
-                tweetabout:1,
-                owner: 1,
-                totalLikes:1,
-                LikedByme:1,
-                
-              },
-            },
+              }
           ]);
-          console.log(result)
         res.status(200).json(new APIRESPONCE(200,"all tweet from user",result))
     } catch (error) {
          throw new APIERROR(501,"error occur at geeting tweet from user",error.errors)
