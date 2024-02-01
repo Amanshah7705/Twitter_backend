@@ -14,6 +14,9 @@ const LikesSchema = mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:"UserMainModel"
     }
+},{
+    timestamps: true
+
 })
 
 const LikesModel = mongoose.model('LikesModel',LikesSchema)

@@ -25,6 +25,9 @@ const UserMainSchema = mongoose.Schema({
         type:String,
         default:null
     }
+},{
+    timestamps: true
+
 })
 
 UserMainSchema.pre('deleteOne', async function (next) {

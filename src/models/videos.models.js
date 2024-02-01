@@ -13,6 +13,9 @@ const VideoSchema = mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:"CommentModel"
     }
+},{
+    timestamps: true
+
 })
 
 const VideoModel = mongoose.model('VideoModel',VideoSchema)

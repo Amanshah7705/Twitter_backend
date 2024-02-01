@@ -19,6 +19,9 @@ const ExtraFieldSchema = mongoose.Schema({
         ref:"UserMainModel",
         unique:true
     }
+},{
+    timestamps: true
+
 })
 
 const ExtraFieldModel = mongoose.model('ExtraFieldModel',ExtraFieldSchema);

@@ -18,6 +18,9 @@ const CommentSchema = mongoose.Schema({
            ref:"CommentModel"
     }]
 
+},{
+    timestamps: true
+
 })
 
 

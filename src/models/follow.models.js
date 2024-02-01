@@ -10,6 +10,8 @@ const FollowSchema = mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:"UserMainModel"
     }
+},{
+    timestamps: true
 })
 
 
