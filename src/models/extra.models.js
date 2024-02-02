@@ -17,7 +17,6 @@ const ExtraFieldSchema = mongoose.Schema({
     user_id:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"UserMainModel",
-        unique:true
     }
 },{
     timestamps: true

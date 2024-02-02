@@ -204,7 +204,7 @@ const AllTweetOfThatUser = HandleMiddleware(async (req, res, next) => {
                 }
             }
         ]);
-        // console.log(result)
+       
         res.status(200).json(new APIRESPONCE(200, "all tweet from user", result))
     } catch (error) {
         throw new APIERROR(501, "error occur at geeting tweet from user", error.errors)
