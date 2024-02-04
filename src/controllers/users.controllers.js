@@ -160,14 +160,12 @@ const NewPassword = HandleMiddleware(async (req, res, next) => {
   newData.password = await MakePassword(password);
   await newData.save();
 
-  res
-    .status(200)
-    .json(
-      new APIRESPONCE(200, "Done", {
-        username: newData.username,
-        email: newData.email,
-      })
-    );
+  res.status(200).json(
+    new APIRESPONCE(200, "Done", {
+      username: newData.username,
+      email: newData.email,
+    })
+  );
 });
 const UpdateDetails = HandleMiddleware(async (req, res, next) => {
   try {
@@ -494,49 +492,50 @@ const SearchBar = HandleMiddleware(async (req, res, next) => {
   }
 });
 const getUserInfo = async (userId) => {
-  return UserMainModel.findOne({ _id: userId }, { username: 1,_id:0 });
+  return UserMainModel.findOne({ _id: userId }, { username: 1, _id: 0 });
 };
 
-const DeatilsForList = HandleMiddleware(async(req,res,next)=>{
-     const {list_of_user} = req.body
-     let acc=[]
-     const promises = list_of_user.map(async (userId) => {
-      const datax= await getUserInfo(userId);
-      acc.push({
-        userId:userId,
-        username:datax.username
-      })
-      
+const DeatilsForList = HandleMiddleware(async (req, res, next) => {
+  const { list_of_user } = req.body;
+  let acc = [];
+  const promises = list_of_user.map(async (userId) => {
+    const datax = await getUserInfo(userId);
+    acc.push({
+      userId: userId,
+      username: datax.username,
     });
+  });
 
-    await Promise.all(promises);
+  await Promise.all(promises);
 
-    res.status(200).json(new APIRESPONCE(200,"Your list",acc))
-})
+  res.status(200).json(new APIRESPONCE(200, "Your list", acc));
+});
 
-const GetUsername = HandleMiddleware(async(req,res,next)=>{
-    try {
-      const mydata=req.user
-      res.status(200).json(new APIRESPONCE(200,"your username",{userId:mydata._id}))
-    } catch (error) {
-       throw new APIERROR(501,"error occur at getuser part",error.errors)
-    }
-})
+const GetUsername = HandleMiddleware(async (req, res, next) => {
+  try {
+    const mydata = req.user;
+    res
+      .status(200)
+      .json(new APIRESPONCE(200, "your username", { userId: mydata._id }));
+  } catch (error) {
+    throw new APIERROR(501, "error occur at getuser part", error.errors);
+  }
+});
 
-const ListOfuser = HandleMiddleware(async(req,res,next)=>{
-     try {
-      const data = await UserMainModel.find()
-      const acc={}
-      data.reduce((_, user) => {
-       acc[user._id] = user.username;
-       return acc;
-     }, {});
- 
-      res.status(200).json(new APIRESPONCE(200,"ALL list of user",acc))
-     } catch (error) {
-         throw new APIERROR(500,"eror occur at username find part",error.errors)
-     }
-})
+const ListOfuser = HandleMiddleware(async (req, res, next) => {
+  try {
+    const data = await UserMainModel.find();
+    const acc = {};
+    data.reduce((_, user) => {
+      acc[user._id] = user.username;
+      return acc;
+    }, {});
+
+    res.status(200).json(new APIRESPONCE(200, "ALL list of user", acc));
+  } catch (error) {
+    throw new APIERROR(500, "eror occur at username find part", error.errors);
+  }
+});
 export {
   RegisterUser,
   LoginUser,
@@ -553,5 +552,5 @@ export {
   SearchBar,
   DeatilsForList,
   GetUsername,
-  ListOfuser
+  ListOfuser,
 };

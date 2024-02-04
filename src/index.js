@@ -6,10 +6,10 @@ dotenv.config({
   path: "./.env",
 });
 const port = process.env.PORT;
-const port2 = process.env.PORT2
+const port2 = process.env.PORT2;
 ConnectDB()
   .then(() => {
     app.listen(port);
-    server.listen(port2)
+    server.listen(port2);
   })
   .catch();

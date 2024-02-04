@@ -219,9 +219,13 @@ const AllTweetOfThatUser = HandleMiddleware(async (req, res, next) => {
 });
 
 const TweetFromId = HandleMiddleware(async (req, res, next) => {
-  const { id } = req.body;
-  const data = await TweetModel.findById(id);
-  res.status(200).json(new APIRESPONCE(200, "Tweet You serch for", data));
+  try {
+    const { id } = req.body;
+    const data = await TweetModel.findById(id);
+    res.status(200).json(new APIRESPONCE(200, "Tweet You serch for", data));
+  } catch (error) {
+    throw new APIERROR(501, "eroror in tweet form id", error.errors);
+  }
 });
 
 export {

@@ -15,24 +15,18 @@ app.use(cookieParser());
 
 import UserRouter from "./routes/users.router.js";
 
-
-app.use("/users",UserRouter)
-
+app.use("/users", UserRouter);
 
 import TweetRouter from "./routes/tweet.router.js";
 
-app.use("/tweet",TweetRouter)
+app.use("/tweet", TweetRouter);
 
 import LikesRouter from "./routes/likes.router.js";
 
-app.use("/likes",LikesRouter)
-
+app.use("/likes", LikesRouter);
 
 import CommentRouter from "./routes/comment.router.js";
 
-app.use("/comments",CommentRouter)
-
-
-
+app.use("/comments", CommentRouter);
 
 export { app };

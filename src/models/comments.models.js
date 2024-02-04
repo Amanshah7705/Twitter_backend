@@ -13,10 +13,10 @@ const CommentSchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "TweetModel",
     },
-    underComment:{
+    underComment: {
       type: mongoose.Schema.Types.ObjectId,
-      ref:"CommentModel"
-    }
+      ref: "CommentModel",
+    },
   },
   {
     timestamps: true,
