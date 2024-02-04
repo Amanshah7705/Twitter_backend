@@ -26,4 +26,13 @@ app.use("/tweet",TweetRouter)
 import LikesRouter from "./routes/likes.router.js";
 
 app.use("/likes",LikesRouter)
+
+
+import CommentRouter from "./routes/comment.router.js";
+
+app.use("/comments",CommentRouter)
+
+
+
+
 export { app };

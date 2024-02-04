@@ -1,29 +1,28 @@
 import mongoose from "mongoose";
 
-
-const CommentSchema = mongoose.Schema({
-    textcomment:{
-        type:String,
+const CommentSchema = mongoose.Schema(
+  {
+    textcomment: {
+      type: String,
     },
-    owner:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"UserMainModel"
+    owner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "UserMainModel",
     },
-    undertweet:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"TweetModel"
+    undertweet: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "TweetModel",
     },
-    rep:[{
-           type:mongoose.Schema.Types.ObjectId,
-           ref:"CommentModel"
-    }]
+    underComment:{
+      type: mongoose.Schema.Types.ObjectId,
+      ref:"CommentModel"
+    }
+  },
+  {
+    timestamps: true,
+  }
+);
 
-},{
-    timestamps: true
+const CommentModel = mongoose.model("CommentModel", CommentSchema);
 
-})
-
-
-const CommentModel = mongoose.model('CommentModel',CommentSchema)
-
-export default CommentModel
+export default CommentModel;

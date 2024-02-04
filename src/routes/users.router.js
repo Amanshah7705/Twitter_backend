@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { RegisterUser, LoginUser, ForgotPassword, NewPassword, UpdateDetails, FollowList, UnFollowList, UserDeatils, ProfileDeatils, SearchBar } from "../controllers/users.controllers.js";
+import { RegisterUser, LoginUser, ForgotPassword, NewPassword, UpdateDetails, FollowList, UnFollowList, UserDeatils, ProfileDeatils, SearchBar, DeatilsForList, GetUsername, ListOfuser } from "../controllers/users.controllers.js";
 import { upload } from '../middlewares/multer.middleware.js'
 import AuthMiddleWare from "../middlewares/auth.middleware.js";
 const UserRouter = Router()
@@ -21,4 +21,9 @@ UserRouter.route("/UnFollowTo").post(AuthMiddleWare, UnFollowList)
 UserRouter.route("/profile-details").post(AuthMiddleWare, ProfileDeatils)
 
 UserRouter.route('/searchbar').post(AuthMiddleWare, SearchBar)
+UserRouter.route('/listfor').post(AuthMiddleWare,DeatilsForList)
+
+UserRouter.route('/forid').post(AuthMiddleWare,GetUsername)
+
+UserRouter.route("/allid").post(AuthMiddleWare,ListOfuser)
 export default UserRouter
