@@ -10,9 +10,7 @@ const io = new Server(server, {
 import ChatModel from "../models/chat.models.js";
 
 io.on("connection", async (socket) => {
-  socket.on("join-room", async (roomId) => {
-    socket.join(roomId);
-  });
+  
   socket.on("send-data-server", async (newData) => {
     let firstuser = newData.user1;
     let seconduser = newData.user2;
@@ -37,9 +35,10 @@ io.on("connection", async (socket) => {
       });
       await CreateData.save();
     } else {
-      let fr = 1;
-      if (data[0].user1 !== firstuser) {
-        fr = 0;
+      let fr = 0;
+    
+      if (data[0].user1 != firstuser) {
+        fr = 1;
       }
 
       const newd1 = {
@@ -56,10 +55,18 @@ io.on("connection", async (socket) => {
       firstuser: firstuser,
       seconduser: seconduser,
     };
-    socket.emit("id-from-client", newData2);
+      const data1 = await ChatModel.find({
+        $or: [
+          { user1: firstuser, user2: seconduser },
+          { user2: firstuser, user1: seconduser },
+        ],
+      })
+     
+    socket.emit("send-data-to-client", data1);
   });
 
   socket.on("id-from-client", async (newData) => {
+   
     if (newData) {
       let firstuser = newData.firstuser;
       let seconduser = newData.seconduser;
@@ -68,13 +75,9 @@ io.on("connection", async (socket) => {
           { user1: firstuser, user2: seconduser },
           { user2: firstuser, user1: seconduser },
         ],
-      }).sort({ createdAt: -1 });
-
+      })
       socket.emit("send-data-to-client", data);
     }
-  });
-  socket.on("disconnect", () => {
-    console.log("User disconnected");
   });
 });
 

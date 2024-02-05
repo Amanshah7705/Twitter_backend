@@ -30,3 +30,4 @@ import CommentRouter from "./routes/comment.router.js";
 app.use("/comments", CommentRouter);
 
 export { app };
+

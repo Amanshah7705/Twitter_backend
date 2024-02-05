@@ -1,22 +1,22 @@
 import mongoose from "mongoose";
 
-const ChatSchema = new mongoose.Schema(
+const GroupSchema = new mongoose.Schema(
   {
-    user1: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "UserMainModel",
-      required: true,
-    },
-    user2: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "UserMainModel",
-      required: true,
+    participant:[
+        {
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"UserMainModel"
+        }
+    ],
+    groupname:{
+       type:String,
+       unique:true,
     },
     AllChat: [
       {
         textfrom: {
-          type: Number,
-          required: true,
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"UserMainModel"
         },
         textabout: {
           type: String,
@@ -50,6 +50,6 @@ const ChatSchema = new mongoose.Schema(
   }
 );
 
-const ChatModel = mongoose.model("ChatModel", ChatSchema);
+const GroupModel = mongoose.model("GroupModel", GroupSchema);
 
-export default ChatModel;
+export default GroupModel;
