@@ -35,8 +35,8 @@ const Send_Data_to_frontend = HandleMiddleware(async(req,res,next)=>{
     try {
         const {friendid} = req.body
         const data = await PeerModel.find({UserId:friendid})
-        // console.log(data)
-        if(!data){
+        //  console.log(data)
+        if(data.length>0){
             res.status(200).json(new APIRESPONCE(200,"Your Friend Id",data))
         }
         else{
