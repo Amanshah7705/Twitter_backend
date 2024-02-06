@@ -35,13 +35,13 @@ const Send_Data_to_frontend = HandleMiddleware(async(req,res,next)=>{
     try {
         const {friendid} = req.body
         const data = await PeerModel.find({UserId:friendid})
-        console.log(data)
-        // if(!data){
-        //     res.status(200).json(new APIRESPONCE(200,"Your Friend Id",data))
-        // }
-        // else{
-        //     throw new APIERROR(500,"users does not exist",)
-        // }
+        // console.log(data)
+        if(!data){
+            res.status(200).json(new APIRESPONCE(200,"Your Friend Id",data))
+        }
+        else{
+            throw new APIERROR(500,"users does not exist",)
+        }
     } catch (error) {
          throw new APIERROR(500,"error occur at groupcall part",error)
     }
