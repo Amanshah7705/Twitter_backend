@@ -29,5 +29,10 @@ import CommentRouter from "./routes/comment.router.js";
 
 app.use("/comments", CommentRouter);
 
+
+import PeerRouter from "./routes/peer.router.js";
+
+app.use('/peer',PeerRouter)
+
 export { app };
 

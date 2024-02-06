@@ -536,6 +536,7 @@ const ListOfuser = HandleMiddleware(async (req, res, next) => {
     throw new APIERROR(500, "eror occur at username find part", error.errors);
   }
 });
+
 export {
   RegisterUser,
   LoginUser,
