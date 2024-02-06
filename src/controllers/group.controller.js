@@ -29,7 +29,6 @@ io.on("connection", async (socket) => {
     })
     socket.on('group-from-client',async(newdata)=>{
         const data = await GroupModel.find({groupname:newdata.groupname})
-        (data)
         socket.emit('group-data',data)
     })
     socket.on('first',async()=>{
