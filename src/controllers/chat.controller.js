@@ -10,7 +10,6 @@ const io = new Server(server, {
 import ChatModel from "../models/chat.models.js";
 
 io.on("connection", async (socket) => {
-  
   socket.on("send-data-server", async (newData) => {
     let firstuser = newData.user1;
     let seconduser = newData.user2;
