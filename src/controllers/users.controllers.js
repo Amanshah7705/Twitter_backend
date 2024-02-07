@@ -360,12 +360,14 @@ const TimePass = HandleMiddleware(async (req, res, next) => {
 const ProfileDeatils = HandleMiddleware(async (req, res, next) => {
   try {
     const { id_for_deatils } = req.body;
+    // console.log(id_for_deatils)
     const mydata = req.user;
     const id3 = mydata._id;
     if (!id_for_deatils) {
       throw new APIERROR(501, "Enter id for deatils");
     }
     const data = await UserMainModel.findById(id_for_deatils);
+    // console.log(data)
     if (!data) {
       throw new APIERROR(501, "User does not exist");
     }
@@ -428,6 +430,7 @@ const ProfileDeatils = HandleMiddleware(async (req, res, next) => {
         },
       },
     ]);
+    // console.log(totaldata)
     let follow = 0;
     if (totaldata[0]?.TotalFollowPart[0]?.follow?.length) {
       follow = totaldata[0]?.TotalFollowPart[0]?.follow?.length;
@@ -437,9 +440,11 @@ const ProfileDeatils = HandleMiddleware(async (req, res, next) => {
     if (totaldata[0]?.TotalFollowingPart[0]?.followers?.length) {
       following = totaldata[0]?.TotalFollowingPart[0]?.followers?.length;
     }
-    let meka = await totaldata[0].TotalFollowingPart[0].followers.find(
+    // console.log(follow,following)
+    let meka = await totaldata[0]?.TotalFollowingPart[0]?.followers?.find(
       (item) => item.toString() === mydata._id.toString()
     );
+    // console.log(meka)
     if (meka) {
       meka = true;
     } else {

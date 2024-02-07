@@ -24,7 +24,7 @@ const AuthMiddleWare = HandleMiddleware(async (req, res, next) => {
       { email: decodedToken.email },
       { password: 0 }
     );
-
+    //  console.log(user)
     if (!user) {
       throw new APIERROR(401, "Unauthorized: User not found");
     }

@@ -57,92 +57,70 @@ const GetAllTweet = HandleMiddleware(async (req, res, next) => {
   try {
     const mydata = req.user;
     const {needid} = req.body
-    // console.log(needid)
-    // const result = await TweetModel.aggregate([
-    //   {
-    //     $lookup: {
-    //       from: "likesmodels",
-    //       localField: "_id",
-    //       foreignField: "whichtweet",
-    //       as: "likestweet",
-    //     },
-    //   },
-    //   {
-    //     $addFields: {
-    //       totallikes: {
-    //         $size: "$likestweet",
-    //       },
-    //       LikedByme: {
-    //         $in: [mydata._id, "$likestweet.owner"],
-    //       },
-    //     },
-    //   },
-    //   {
-    //     $lookup: {
-    //       from: "usermainmodels",
-    //       localField: "likestweet.owner",
-    //       foreignField: "_id",
-    //       as: "likestweetuser",
-    //     },
-    //   },
-    //   {
-    //     $addFields: {
-    //       ControlByme: {
-    //         $eq: [mydata._id, "$owner"],
-    //       },
-    //     },
-    //   },
-    //   {
-    //     $sort: {
-    //       updatedAt: -1,
-    //     },
-    //   },
-    //   {
-    //     $project: {
-    //       owner: 0,
-    //       createdAt: 0,
-    //       updatedAt: 0,
-    //       __v: 0,
-    //       likestweet: {
-    //         whichtweet: 0,
-    //         createdAt: 0,
-    //         updatedAt: 0,
-    //         __v: 0,
-    //         owner: 0,
-    //       },
-    //       likestweetuser: {
-    //         email: 0,
-    //         password: 0,
-    //         refresh_token: 0,
-    //         createdAt: 0,
-    //         updatedAt: 0,
-    //         __v: 0,
-    //       },
-    //     },
-    //   },
-    // ]);
-    // const result = await TweetModel.aggregate([
-    //   {
-    //     $lookup: {
-    //       from: "followermodels", 
-    //       let: { _id: needid },
-    //       pipeline: [
-    //         {
-    //           $match: {
-    //             $expr: {
-    //               $and: [
-    //                 { $in: ["$$_id", "$followers"] }, 
-    //                 { $eq: ["$admin", "$$_id"] } 
-    //               ]
-    //             }
-    //           }
-    //         }
-    //       ],
-    //       as: "followed_users"
-    //     }
-    //   }
-    // ])
-    // console.log(result)
+    const result = await TweetModel.aggregate([
+      {
+        $lookup: {
+          from: "likesmodels",
+          localField: "_id",
+          foreignField: "whichtweet",
+          as: "likestweet",
+        },
+      },
+      {
+        $addFields: {
+          totallikes: {
+            $size: "$likestweet",
+          },
+          LikedByme: {
+            $in: [mydata._id, "$likestweet.owner"],
+          },
+        },
+      },
+      {
+        $lookup: {
+          from: "usermainmodels",
+          localField: "likestweet.owner",
+          foreignField: "_id",
+          as: "likestweetuser",
+        },
+      },
+      {
+        $addFields: {
+          ControlByme: {
+            $eq: [mydata._id, "$owner"],
+          },
+        },
+      },
+      {
+        $sort: {
+          updatedAt: -1,
+        },
+      },
+      {
+        $project: {
+          owner: 0,
+          createdAt: 0,
+          updatedAt: 0,
+          __v: 0,
+          likestweet: {
+            whichtweet: 0,
+            createdAt: 0,
+            updatedAt: 0,
+            __v: 0,
+            owner: 0,
+          },
+          likestweetuser: {
+            email: 0,
+            password: 0,
+            refresh_token: 0,
+            createdAt: 0,
+            updatedAt: 0,
+            __v: 0,
+          },
+        },
+      },
+    ]);
+
     res.status(200).json(new APIRESPONCE(200, "all tweet from user", result));
   } catch (error) {
     throw new APIERROR(

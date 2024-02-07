@@ -7,9 +7,7 @@ import HandleMiddleware from "../utils/handlemiddleware.js";
 const Send_Data_To_Backend = HandleMiddleware(async(req,res,next)=>{
       try {
         const {myid,mypeerid} = req.body
-        // console.log(myid,mypeerid)
         const data = await PeerModel.find({UserId : myid})
-      //  console.log(data)
         if(data.length===0){
              const newdata = new PeerModel({
               UserId:myid,
@@ -35,7 +33,6 @@ const Send_Data_to_frontend = HandleMiddleware(async(req,res,next)=>{
     try {
         const {friendid} = req.body
         const data = await PeerModel.find({UserId:friendid})
-        //  console.log(data)
         if(data.length>0){
             res.status(200).json(new APIRESPONCE(200,"Your Friend Id",data))
         }
