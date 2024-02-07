@@ -7,9 +7,9 @@ import HandleMiddleware from "../utils/handlemiddleware.js";
 const Send_Data_To_Backend = HandleMiddleware(async(req,res,next)=>{
       try {
         const {myid,mypeerid} = req.body
-  
+        // console.log(myid,mypeerid)
         const data = await PeerModel.find({UserId : myid})
-        // console.log(data)
+      //  console.log(data)
         if(data.length===0){
              const newdata = new PeerModel({
               UserId:myid,
@@ -19,7 +19,7 @@ const Send_Data_To_Backend = HandleMiddleware(async(req,res,next)=>{
         }
         else{
             await PeerModel.findOneAndUpdate(
-                { UserId: myid.current }, // Assuming myid.current holds the user ID
+                { UserId: myid }, 
                 { $set: { PeerId: mypeerid } },
                
               );
